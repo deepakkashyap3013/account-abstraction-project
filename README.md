@@ -1,66 +1,72 @@
-## Foundry
+## Account Abstraction (AA)
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Account abstraction is a fundamental concept of blockchain technology. It offers solutions to some of the common challenges faced by users and developers. In this introductory lesson, you will learn:
 
-Foundry consists of:
+* The basic concept of account abstraction and its importance.
+* How account abstraction solves common problems related to private key management and transaction validation.
+* The two main implementations of account abstraction in Ethereum (`EntryPoint.sol`) and ZKsync.
+* The role of alt mempools in handling user operations and transactions.
+* Optional components like the Signature Aggregator and Paymaster in Ethereum's `EntryPoint.sol` contract.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
 
-## Documentation
+### Use of Private Keys for Signing Transactions
 
-https://book.getfoundry.sh/
+Traditionally, users need to manage and use private keys to sign transactions. This can be annoying, confusing, and risky. Losing a private key means losing access to the account. Even worse, a stolen private key means that you've just lost all the value in that account. Account abstraction solves this problem by allowing users to sign transactions without using private keys. Instead, users can use a different type of key that is more user-friendly and secure. This simplifies the process of signing transactions and reduces the risk of losing access to an account, enhancing both security and user experience.
 
-## Usage
+What's more is that this new type of 'key' can be anything you can think of(as long is it can be coded). This means that you can use your phone, Google account, or even your fingerprint to sign transactions. You can even have a group of your friends collectively approve the data. The possibilities are endless.
 
-### Build
 
-```shell
-$ forge build
-```
+### More Flexible Validation Options
 
-### Test
+Another challenge is that traditional transactions are validated by the sender's private key. This means that only the owner of an account can sign and send a transaction from it. With account abstraction, there is more flexibility in how transactions are validated. This means that you can have others to foot the bill for the gas. Account abstraction addresses this by providing a more flexible and secure framework for transaction validation.
 
-```shell
-$ forge test
-```
+### Two Entry point
+![image](https://github.com/user-attachments/assets/670750c1-21a2-4847-b315-596c39462279)
 
-### Format
+The traditional Ethereum transactions consists of first the signing of the transaction by the sender's private key, and then sending it to an Ethereum node. The node verifies that the signature is valid and if so, adds it to its mempool for later inclusion in a block. Account Abstraction, as we have already mentioned add improvements to this process. There are two entry points that we need to understand - Ethereum's `EntryPoint.sol` and ZKsync's native integration.
 
-```shell
-$ forge fmt
-```
 
-### Gas Snapshots
+###Account Abstraction Uses Alt-Mempools
+![image](https://github.com/user-attachments/assets/adbe0381-2e1e-4516-9a38-6007da8d9d05)
+### User Operations (Off-Chain)
 
-```shell
-$ forge snapshot
-```
+In Ethereum, user operations are first sent off-chain. This means that the initial handling and validation occur outside the main blockchain network, reducing congestion and improving efficiency. In the above example, the user operation is signed with Google and is sent to the alt-mempool, which then sends it to the main blockchain network. The alt mempool is any nodes which are facilitating this operation. So the user is not sending their transaction to the Ethereum nodes.
 
-### Anvil
+### Transactions and Gas Payments (On-Chain)
 
-```shell
-$ anvil
-```
+Once validated, the user operations are sent on-chain as transactions. These transactions are executed and gas fees are paid on behalf of the user, directly from their account, by the alt-mempool nodes. This is managed through the `EntryPoint.sol` contract. From here, the user's smart contract essentially becomes their wallet. If a paymaster is not set up, the funds will be deducted from the account. Finally, the contract is deployed to the blockchain.
 
-### Deploy
+### EntryPoint.sol Optional Add-ons
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+The `EntryPoint.sol` contract also allows for optional add-ons, such as a Signature Aggregator and a Paymaster. These add-ons can be used to further optimize gas fees and improve user experience.
 
-### Cast
+#### Signature Aggregator
 
-```shell
-$ cast <subcommand>
-```
+An optional add-on to the EntryPoint.sol contract is the signature aggregator. This add-on lets you define multiple signatures to be aggregated and verified. This means that other users can sign transactions on the same wallet or multi-sign logic can be added, such as requiring multiple signatures before authorizing transactions.
 
-### Help
+#### Paymaster
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+Another optional component is the pay master. It handles gas payments, allowing users to pay for transactions in various ways, not limited to the native cryptocurrency.
+
+### ZKsync
+![image](https://github.com/user-attachments/assets/61029c43-2beb-4b45-891d-16c7de88188b)
+
+### Acts as an Alt-Mempool
+
+In ZKsync, the alt-mempool nodes are also the ZKsync nodes. This means that sending the transaction to the alt-mempool can be skipped. The reason ZKsync can do this is because every account (e.g., MetaMask) is by default a smart contract account as it is automatically connected to a [DefaultAccount.sol](https://github.com/matter-labs/era-contracts/blob/main/system-contracts/contracts/DefaultAccount.sol).
+
+By understanding these concepts, you'll have a solid foundation in account abstraction and its implementation in leading blockchain platforms like Ethereum and ZKsync.
+
+## Questions for Review
+
+Before we move one, here are some questions to help you review what we've covered so far:
+
+* What is account abstraction?
+* What are the two entry points in account abstraction?
+* What is a mempool
+* What are the two optional add-ons for EntryPoint.sol?
+* What is the role of a pay master?
+* How does it work in Ethereum/ZKsync? What's the difference between the two?
+
+
+
