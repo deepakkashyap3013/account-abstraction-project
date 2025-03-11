@@ -26,7 +26,7 @@ Another challenge is that traditional transactions are validated by the sender's
 The traditional Ethereum transactions consists of first the signing of the transaction by the sender's private key, and then sending it to an Ethereum node. The node verifies that the signature is valid and if so, adds it to its mempool for later inclusion in a block. Account Abstraction, as we have already mentioned add improvements to this process. There are two entry points that we need to understand - Ethereum's `EntryPoint.sol` and ZKsync's native integration.
 
 
-###Account Abstraction Uses Alt-Mempools
+### Account Abstraction Uses Alt-Mempools
 ![image](https://github.com/user-attachments/assets/adbe0381-2e1e-4516-9a38-6007da8d9d05)
 ### User Operations (Off-Chain)
 
